@@ -3,6 +3,7 @@ import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { tap, take } from 'rxjs';
 
 //Declaring the api url that will provide data for the client app
 const apiUrl = `https://sbmovie-flix-81059d891de6.herokuapp.com/`;
@@ -43,7 +44,24 @@ export class UserRegistrationService{
     );
   }
 
-  
+  getUser(): Observable<any> {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = localStorage.getItem("token");
+    const url = apiUrl + "users/" + user.userName;
+    const headers = new HttpHeaders({
+      Authorization: "Bearer " + token,
+    });
+    return this.http.get(url, { headers }).pipe(
+      tap((result: any) => {
+      }),
+      map(this.extractResponseData),
+      catchError((error) => {
+        console.error("API Error:", error);
+        return this.handleError(error);
+      })
+    );
+  }
+
   // get all movies
   getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');
@@ -102,7 +120,7 @@ export class UserRegistrationService{
     );
   }
 
-  // get a user by userId  -- not sure if this is needed !!!
+ /* // get a user by userId  -- not sure if this is needed !!!
   getUser(userId: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'users/' + userId, {
@@ -113,7 +131,7 @@ export class UserRegistrationService{
       map(this.extractResponseData),
       catchError(this.handleError)
     );
-  }
+  }*/
 
   // Get favourite movies by userid
   getFavoriteMovies(userId: string): Observable<any> {

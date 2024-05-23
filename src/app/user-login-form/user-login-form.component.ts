@@ -2,6 +2,8 @@ import { UserRegistrationService } from '../fetch-api-data.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-user-login-form',
@@ -18,7 +20,8 @@ export class UserLoginFormComponent implements OnInit {
   constructor(
     public FetchApiDataService: UserRegistrationService,
     public dialogRef: MatDialogRef<UserLoginFormComponent>,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
 
@@ -29,11 +32,14 @@ export class UserLoginFormComponent implements OnInit {
    * Function responsible for sending the form inputs to the backend
    */
   loginUser(): void {
+    
     this.FetchApiDataService.userLogin(this.userData).subscribe((result) => {
       // Logic for a successful user login
+      
       console.log(result);
       localStorage.setItem('user', JSON.stringify(result.user));
       localStorage.setItem('token', result.token);
+      this.router.navigate(['movies']);
       this.dialogRef.close(); // This will close the modal on success!
       console.log(result);
       this.snackBar.open('user logged in successfully', 'OK', {

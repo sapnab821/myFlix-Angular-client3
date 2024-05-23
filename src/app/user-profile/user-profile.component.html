@@ -1,0 +1,81 @@
+<div class="main">
+
+    <!-- User profile section -->
+    <div class="user-profile">
+        <h1>User Profile</h1>
+
+        <!-- User information display section -->
+        <div class="user-container">
+            <h2>User Info</h2>
+
+            <!-- Display user's name -->
+            <div class="user-info-display">
+                <label>Name</label>
+                <span>{{ userData.userName }}</span>
+            </div>
+
+            <!-- Display user's birthday -->
+            <div class="user-info-display">
+                <label>Birthday</label>
+                <span>{{ userData.birthday | date : "longDate" }}</span>
+            </div>
+
+            <!-- Display user's email -->
+            <div class="user-info-display">
+                <label>Email</label>
+                <span>{{ userData.email }}</span>
+            </div>
+
+           <form>
+
+                    <!-- Input field for user's birthday -->
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Birthday</mat-label>
+                        <input matInput type="date" [(ngModel)]="formUserData.birthday" name="birthday"
+                            placeholder="Birthday" />
+                    </mat-form-field>
+
+                    <!-- Input field for user's email -->
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Email</mat-label>
+                        <input matInput type="email" [(ngModel)]="userData.email" name="email" placeholder="Email" />
+                    </mat-form-field>
+
+                    
+                </form>
+            </div>
+        </div>
+        <!-- Add space between user info and favorite movies -->
+        <div class="spacer"></div>
+        <!-- Favorite movies section -->
+        <div class="content">
+            <h2>Favorite Movies</h2>
+
+            <!-- Container for favorite movies -->
+            <div class="favorite-movies-container">
+                <!-- Message when there are no favorite movies -->
+                <div *ngIf="favoritemovie.length === 0" class="movie-cards">
+                    <p>No favorite movies found!</p>
+                </div>
+
+                <!-- Display favorite movies -->
+                <div class="movie-cards">
+                    <mat-card *ngFor="let movie of favoritemovie" class="card">
+                        <!-- Movie image -->
+                        <img src="{{ movie.image }}" alt="{{ movie._id }}" />
+
+                        <!-- Movie details -->
+                        <div class="cardContent">
+                            <mat-card-header>
+                                <mat-card-title>{{ movie.movieName }}</mat-card-title>
+                                <mat-card-subtitle>{{ movie?.Director?.director }}</mat-card-subtitle>
+                            </mat-card-header>
+
+                            
+            </div>
+            </mat-card>
+            </div>
+            </div>
+            </div>
+    </div>
+
