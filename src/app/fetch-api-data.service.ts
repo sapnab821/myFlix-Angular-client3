@@ -44,23 +44,7 @@ export class UserRegistrationService{
     );
   }
 
-  getUser(): Observable<any> {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const token = localStorage.getItem("token");
-    const url = apiUrl + "users/" + user.userName;
-    const headers = new HttpHeaders({
-      Authorization: "Bearer " + token,
-    });
-    return this.http.get(url, { headers }).pipe(
-      tap((result: any) => {
-      }),
-      map(this.extractResponseData),
-      catchError((error) => {
-        console.error("API Error:", error);
-        return this.handleError(error);
-      })
-    );
-  }
+  
 
   // get all movies
   getAllMovies(): Observable<any> {
@@ -84,10 +68,11 @@ export class UserRegistrationService{
   // Get a single movie by title
   getOneMovie(title: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'movies/' + title, {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
+    return this.http.get(apiUrl + 'movies' + title, {
+      headers: new HttpHeaders(
+        {
+          Authorization: 'Bearer ' + token,
+        })
     }).pipe(
       map(this.extractResponseData),
       catchError(this.handleError)
@@ -120,8 +105,8 @@ export class UserRegistrationService{
     );
   }
 
- /* // get a user by userId  -- not sure if this is needed !!!
-  getUser(userId: string): Observable<any> {
+ // get a user by userId  -- not sure if this is needed !!!
+ /* getUser(userId: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'users/' + userId, {
       headers: new HttpHeaders({
@@ -132,6 +117,22 @@ export class UserRegistrationService{
       catchError(this.handleError)
     );
   }*/
+
+  getUser(): Observable<any> {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = localStorage.getItem("token");
+    const url = apiUrl + "users/" + user.Username; // <-- Corrected property name
+    const headers = new HttpHeaders({
+      Authorization: "Bearer " + token,
+    });
+    return this.http.get(url, { headers }).pipe(
+      map(this.extractResponseData),
+      catchError((error) => {
+        console.error("API Error:", error);
+        return this.handleError(error);
+      })
+    );
+  }
 
   // Get favourite movies by userid
   getFavoriteMovies(userId: string): Observable<any> {

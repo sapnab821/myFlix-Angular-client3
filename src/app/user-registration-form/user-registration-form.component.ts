@@ -37,7 +37,7 @@ registerUser(): void {
         duration: 2000
      });
     }, (result) => {
-      this.snackBar.open(result, 'OK', {
+      this.snackBar.open(result, 'ok', {
         duration: 2000
       });
     });

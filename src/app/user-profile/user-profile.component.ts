@@ -21,29 +21,14 @@ import { MovieSynopsisComponent } from '../movie-synopsis/movie-synopsis.compone
 })
 export class UserProfileComponent implements OnInit {
   /** Input for user data. */
-  @Input() userData: any = { userName: '', password: '', email: '', birthday: '' };
+  @Input() userData = { Username: '', Email: '', Birthday: '', UserId: '' };
+  formUserData = { Username: '', Email: '', Birthday: '', UserId: '' };
 
-  /** Form data for user. */
-  formUserData: any = {
-    userName: '',
-    password: '',
-    email: '',
-    birthday: '',
-    favoriteMovie: []
-  };
-
-  /** User object. */
   user: any = {};
-
-  /** List of all movies. */
   movies: any[] = [];
-
-  /** List of favorite movies. */
   favoritemovie: any[] = [];
-
-  /** List of favorite movie IDs. */
   favoriteMoviesIDs: any[] = [];
-
+  
   /**
      * Constructs the UserProfileComponent.
      * @param fetchApiData - The service for fetching API data.
@@ -58,31 +43,31 @@ export class UserProfileComponent implements OnInit {
     public router: Router
   ) { }
 /** Lifecycle hook called after component initialization. */  ngOnInit(): void {
-    this.getProfile();
-   
+    
   }
 
-  /**
-     * Fetches user profile data.
-     */
-  public getProfile(): void {
-    this.fetchApiData.getUser().subscribe((result: any) => {
-      console.log('result:', result.favoritemovie);
-      this.user = result;
-      this.userData.userName = this.user.userName;
-      this.userData.email = this.user.email;
-      if (this.user.birthday) {
-        let Birthday = new Date(this.user.birthday);
-        if (!isNaN(Birthday.getTime())) {
-          this.userData.birthday = Birthday.toISOString().split('T')[0];
+
+
+  
+     // Fetches user profile data.
+     
+     public getProfile(): void {
+      this.fetchApiData.getUser().subscribe((result: any) => {
+        //console.log('result:', result);
+        this.user = result;
+        this.userData.Username = this.user.Username;
+        this.userData.Email = this.user.Email;
+        if (this.user.Birthday) {
+          let Birthday = new Date(this.user.Birthday);
+          if (!isNaN(Birthday.getTime())) {
+            this.userData.Birthday = Birthday.toISOString().split('T')[0];
+          }
         }
-      }
-      this.formUserData = { ...this.userData };
-      this.favoriteMoviesIDs = this.user.favoritemovie;
-
-      this.fetchApiData.getAllMovies().subscribe((movies: any[]) => {
-        this.favoritemovie = movies.filter((movie: any) => this.favoriteMoviesIDs.includes(movie._id));
-      });
-    });
-  }
-}
+        this.formUserData = { ...this.userData };
+        //this.favoriteMoviesIDs = this.user.favoritemovie;
+  
+        //this.fetchApiData.getAllMovies().subscribe((movies: any[]) => {
+         // this.favoritemovie = movies.filter((movie: any) => this.favoriteMoviesIDs.includes(movie._id));
+        });
+      };
+    }

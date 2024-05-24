@@ -10,20 +10,20 @@
 
             <!-- Display user's name -->
             <div class="user-info-display">
-                <label>Name</label>
-                <span>{{ userData.userName }}</span>
+                <label>Username</label>
+                <span>{{ user.Username}}</span>
             </div>
 
             <!-- Display user's birthday -->
             <div class="user-info-display">
                 <label>Birthday</label>
-                <span>{{ userData.birthday | date : "longDate" }}</span>
+                <span>{{ userData.Birthday | date : "longDate" }}</span>
             </div>
 
             <!-- Display user's email -->
             <div class="user-info-display">
                 <label>Email</label>
-                <span>{{ userData.email }}</span>
+                <span>{{ userData.Email }}</span>
             </div>
 
            <form>
@@ -31,14 +31,14 @@
                     <!-- Input field for user's birthday -->
                     <mat-form-field class="example-full-width">
                         <mat-label>Birthday</mat-label>
-                        <input matInput type="date" [(ngModel)]="formUserData.birthday" name="birthday"
+                        <input matInput type="date" [(ngModel)]="formUserData.Birthday" name="birthday"
                             placeholder="Birthday" />
                     </mat-form-field>
 
                     <!-- Input field for user's email -->
                     <mat-form-field class="example-full-width">
                         <mat-label>Email</mat-label>
-                        <input matInput type="email" [(ngModel)]="userData.email" name="email" placeholder="Email" />
+                        <input matInput type="email" [(ngModel)]="formUserData.Email" name="email" placeholder="Email" />
                     </mat-form-field>
 
                     
@@ -67,7 +67,7 @@
                         <!-- Movie details -->
                         <div class="cardContent">
                             <mat-card-header>
-                                <mat-card-title>{{ movie.movieName }}</mat-card-title>
+                                <mat-card-title>{{ movie.Title }}</mat-card-title>
                                 <mat-card-subtitle>{{ movie?.Director?.director }}</mat-card-subtitle>
                             </mat-card-header>
 

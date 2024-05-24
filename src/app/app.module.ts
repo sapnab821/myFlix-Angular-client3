@@ -28,6 +28,7 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { MovieSynopsisComponent } from './movie-synopsis/movie-synopsis.component';
 
 
 const appRoutes: Routes = [
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
     MovieCardComponent,
     WelcomePageComponent,
     UserProfileComponent,
+    MovieSynopsisComponent,
    
   ],
   imports: [

@@ -4,6 +4,7 @@ import { UserRegistrationService } from '../fetch-api-data.service'
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { MovieSynopsisComponent } from '../movie-synopsis/movie-synopsis.component';
 
 @Component({
   selector: 'app-movie-card',
@@ -38,6 +39,15 @@ getMovies(): void {
       this.movies = resp;
       console.log(this.movies);
       return this.movies;
+    });
+  }
+
+  openSynopsisDialog(title: string, description: string): void {
+    this.dialog.open(MovieSynopsisComponent, {
+      data: {
+        Description: description
+      },
+      width: '500px',
     });
   }
 }
