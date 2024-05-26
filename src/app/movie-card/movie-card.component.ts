@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MovieSynopsisComponent } from '../movie-synopsis/movie-synopsis.component';
+import { GenreInfoComponent } from '../genre-info/genre-info.component';
 
 @Component({
   selector: 'app-movie-card',
@@ -45,6 +46,16 @@ getMovies(): void {
   openSynopsisDialog(title: string, description: string): void {
     this.dialog.open(MovieSynopsisComponent, {
       data: {
+        Description: description
+      },
+      width: '500px',
+    });
+  }
+
+  openGenreDialog(name: string, description: string): void {
+    this.dialog.open(GenreInfoComponent, {
+      data: {
+        Name: name,
         Description: description
       },
       width: '500px',

@@ -29,6 +29,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { MovieSynopsisComponent } from './movie-synopsis/movie-synopsis.component';
+import { GenreInfoComponent } from './genre-info/genre-info.component';
 
 
 const appRoutes: Routes = [
@@ -48,6 +49,7 @@ const appRoutes: Routes = [
     WelcomePageComponent,
     UserProfileComponent,
     MovieSynopsisComponent,
+    GenreInfoComponent,
    
   ],
   imports: [

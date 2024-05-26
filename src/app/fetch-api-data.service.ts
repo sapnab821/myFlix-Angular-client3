@@ -66,9 +66,9 @@ export class UserRegistrationService{
   }
 
   // Get a single movie by title
-  getOneMovie(title: string): Observable<any> {
+  getOneMovie(Name: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'movies' + title, {
+    return this.http.get(apiUrl + 'movies' + Name, {
       headers: new HttpHeaders(
         {
           Authorization: 'Bearer ' + token,
@@ -93,7 +93,7 @@ export class UserRegistrationService{
   }
 
   // get a genre by name
-  getGenre(genreName: string): Observable<any> {
+  public getGenre(genreName: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'movies/genres/' + genreName, {
       headers: new HttpHeaders({
