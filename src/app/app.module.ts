@@ -30,6 +30,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { MovieSynopsisComponent } from './movie-synopsis/movie-synopsis.component';
 import { GenreInfoComponent } from './genre-info/genre-info.component';
+import { DirectorInfoComponent } from './director-info/director-info.component';
 
 
 const appRoutes: Routes = [
@@ -50,6 +51,7 @@ const appRoutes: Routes = [
     UserProfileComponent,
     MovieSynopsisComponent,
     GenreInfoComponent,
+    DirectorInfoComponent,
    
   ],
   imports: [

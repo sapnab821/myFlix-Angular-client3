@@ -1,0 +1,9 @@
+<mat-card-header class="director-card-header">
+    <mat-card-title>{{ data.Name }}</mat-card-title>
+</mat-card-header>
+<mat-card-content>
+    <p>Bio: {{ data.Bio }}</p>
+    <p>Born: {{ data.Birthday }}</p>
+    <p *ngIf="data.Death">Died: {{ data.Death }}</p>
+</mat-card-content>
+

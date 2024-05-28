@@ -9,7 +9,7 @@ class="nav-buttons">
     <div style="display: flex;">
     <mat-card *ngFor="let movie of movies;" style="flex: 1 1 auto;">
         <mat-card-header>
-        <mat-card-title>{{movie.Name}}</mat-card-title>
+        <mat-card-title>{{movie.Title}}</mat-card-title>
             <mat-card-subtitle>Directed by: {{movie.Director.Name}}</mat-card-subtitle>
         </mat-card-header>
         <img src={{movie.imageURL}} alt= {{movie.Name}} />
@@ -19,16 +19,27 @@ class="nav-buttons">
   ">
                 Genre
             </button>
-            <button
-                mat-button
-                color="primary"
-            >
-                Director
-            </button>
+            <button mat-button color="primary" (click)="
+                openDirectorDialog(
+                  movie.Director.Name,
+                  movie.Director.Bio,
+                  movie.Director.Birth,
+                  movie.Director.Death
+                )
+              ">
+                            Director
+                        </button>
             <button mat-button color="primary" (click)="openSynopsisDialog(movie.Name, movie.Description)">
                 Synopsis
             </button>
-            <mat-icon>favorite_border</mat-icon>
+            <button mat-icon-button (click)="toggleFav(movie)">
+                <mat-icon *ngIf="isFav(movie)" style="transform: scale(1.5)">
+                    favorite
+                </mat-icon>
+                <mat-icon *ngIf="!isFav(movie)" style="transform: scale(1.5)">
+                    favorite_border
+                </mat-icon>
+            </button>
         </mat-card-actions>
     </mat-card>
 </div>

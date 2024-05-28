@@ -66,9 +66,9 @@ export class UserRegistrationService{
   }
 
   // Get a single movie by title
-  getOneMovie(Name: string): Observable<any> {
+  getOneMovie(Title: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'movies' + Name, {
+    return this.http.get(apiUrl + 'movies' + Title, {
       headers: new HttpHeaders(
         {
           Authorization: 'Bearer ' + token,
@@ -80,9 +80,9 @@ export class UserRegistrationService{
   }
 
   // Get a director by name
-  getDirector(directorName: string): Observable<any> {
+  public getDirector(Name: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'movies/directors/' + directorName, {
+    return this.http.get(apiUrl + 'movies/director/' + Name, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -118,7 +118,7 @@ export class UserRegistrationService{
     );
   }*/
 
-  getUser(): Observable<any> {
+  /*getUser(): Observable<any> {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const token = localStorage.getItem("token");
     const url = apiUrl + "users/" + user.Username; // <-- Corrected property name
@@ -131,6 +131,55 @@ export class UserRegistrationService{
         console.error("API Error:", error);
         return this.handleError(error);
       })
+    );
+  }*/
+  public getLocalUser(): any {
+    const user = localStorage.getItem('user');
+    if (user && this.isJsonString(user)) {
+      return JSON.parse(user);
+    } else {
+      console.log('Invalid user data in local storage:', user);
+      return null;
+    }
+  }
+
+  private isJsonString(str: string): boolean {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  public setLocalUser(user: any): void {
+    if (user.isJsonObject(user))
+      localStorage.setItem('user', JSON.stringify(user));
+    else
+      console.log('Error setting user');
+  }
+
+  public getUser(Username?: string): Observable<any> {
+
+    const user = this.getLocalUser();
+
+    const token = localStorage.getItem('token');
+    return this.http.get(apiUrl + 'users/' + user.Username, {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + token,
+      })
+    }).pipe(
+      tap({
+        next: data => {
+          if (this.isJsonString(JSON.stringify(data))) {
+          } else {
+            console.log('Data is not valid JSON:', data);
+          }
+        },
+        error: error => console.log('Error:', error)
+      }),
+      map(this.extractResponseData),
+      catchError(this.handleError)
     );
   }
 
@@ -174,9 +223,10 @@ export class UserRegistrationService{
   }
 
   // Edit a user's profile
-  editUserProfile(userDetails: any): Observable<any> {
+  public editUserProfile(userDetails: any): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
-    return this.http.put(apiUrl + 'users/' + userDetails.Username, userDetails, {
+    return this.http.put(apiUrl + 'users/' + user._id, userDetails, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -187,9 +237,9 @@ export class UserRegistrationService{
   }
 
   // Delete a user 
-  deleteUser(userId: string): Observable<any> {
+  deleteUser(_id: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/' + userId, {
+    return this.http.delete(apiUrl + 'users/' + _id, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })

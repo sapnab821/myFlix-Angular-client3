@@ -22,7 +22,7 @@ export class MovieSynopsisComponent implements OnInit {
     public dialog: MatDialogRef<MovieSynopsisComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      Name: string;
+      Title: string;
       Description: string;
     }
   ) { }
@@ -31,6 +31,7 @@ export class MovieSynopsisComponent implements OnInit {
      * Lifecycle hook that is called after data-bound properties of a directive are initialized.
      */
   ngOnInit(): void {
+    
   }
   
 }
