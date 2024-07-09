@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Number } from 'mongoose';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 /**
  *  displaying director information in a dialog.
@@ -14,14 +14,16 @@ export class DirectorInfoComponent implements OnInit {
 
   /**
      * Constructor for DirectorInfoComponent.
+     * @param dialogRef
      * @param data - Data injected into the component containing director information.
      */
   constructor(
+    public dialogRef: MatDialogRef<DirectorInfoComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       Name: string;
       Bio: string;
-      Birthday: Number;
+      Birthday: number;
       Death: string;
     }
   ) { }

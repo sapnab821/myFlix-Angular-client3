@@ -28,9 +28,11 @@ export class MovieCardComponent implements OnInit {
 
   user: any = {};
 
-  userData = { UserId: "", favoritemovie: [] }
+  userData : any = {};
 
   favoritemovie: any[] = [];
+
+  
 
   public Username: string = "";
  
@@ -108,7 +110,13 @@ getMovies(): void {
     * @returns True if the movie is in the favorite list, false otherwise.
     */
   isFav(movie: any): boolean {
-    return this.favoritemovie.includes(movie._id);
+    
+    let userx = localStorage.getItem('user');
+    let user= JSON.parse(userx);
+    const userFavorite=user['FavoriteMovies'];
+    console.log(userFavorite);
+    return userFavorite.includes(movie._id);
+
   }
 
   /**
@@ -168,4 +176,3 @@ getMovies(): void {
     }
   }
 }
-

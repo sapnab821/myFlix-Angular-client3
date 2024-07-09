@@ -39,9 +39,10 @@ export class UserRegistrationService{
  
   public userLogin(userDetails: any): Observable<any> {
     console.log(userDetails);
-    return this.http.post(apiUrl + 'login', userDetails).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post(apiUrl + `login?username=${userDetails.username}&password=${userDetails.password}`, userDetails)
+    //return this.http.post(apiUrl + 'login', userDetails).pipe(
+      .pipe(catchError(this.handleError)
+  );
   }
 
   
@@ -199,7 +200,7 @@ export class UserRegistrationService{
   // Add a movie to a user's list of favorites
   addFavoriteMovie(userId: number, movieId: number): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.post(apiUrl + 'users/' + userId + 'movies/' + movieId, movieId, {
+    return this.http.post(apiUrl + 'users/' + userId + '/movies/' + movieId, movieId, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -212,7 +213,7 @@ export class UserRegistrationService{
   // Delete a movie from a user's list of favorites
   deleteFavoriteMovie(userId: string, movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/' + userId + 'movies/' + movieId, {
+    return this.http.delete(apiUrl + 'users/' + userId + '/movies/' +  movieId, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -223,10 +224,24 @@ export class UserRegistrationService{
   }
 
   // Edit a user's profile
+  /*
   public editUserProfile(userDetails: any): Observable<any> {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
     return this.http.put(apiUrl + 'users/' + user._id, userDetails, {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + token,
+      })
+    }).pipe(
+      map(this.extractResponseData),
+      catchError(this.handleError)
+    );
+  }*/
+
+  public editUserProfile(userDetails:any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    return this.http.put(apiUrl + 'users/' + userDetails.Username, userDetails, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -262,4 +277,3 @@ export class UserRegistrationService{
   }
 
 }    
-

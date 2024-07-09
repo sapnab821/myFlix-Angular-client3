@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter  } from '@angular/core';
 import { UserRegistrationService } from '../fetch-api-data.service';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { number } from 'prop-types';
 //import {date} from 'mongoose';
@@ -26,15 +26,26 @@ export class UserProfileComponent implements OnInit {
 
 
   /** Input for user data. */
-  
-  @Input() userData = { Username: '', Email: '', Birthday: '', _id:'' };
-  formUserData = { Username: '', Email: '', Birthday: '', _id: ''};
+
+  /*@Input() userData = { Username: '', Email: '', Birthday: '', _id: '' };
+  formUserData = { Username: '', Email: '', Birthday: '', _id: '' };*/
+
+   /** Input data for updating user information. */
+   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
+
+  /*
+
+  userData: any = {};
+ */
+  favoriteMovies: any[] = [];
 
   user: any = {};
   movies: any[] = [];
   favoritemovie: any[] = [];
   favoriteMoviesIDs: any[] = [];
-  
+
+  @Output() updateUserEvent = new EventEmitter<any>();
+
   /**
      * Constructs the UserProfileComponent.
      * @param fetchApiData - The service for fetching API data.
@@ -45,22 +56,39 @@ export class UserProfileComponent implements OnInit {
   constructor(
     public fetchApiData: UserRegistrationService,
     public dialog: MatDialog,
+    public dialogRef: MatDialogRef<UserProfileComponent>, 
     public snackBar: MatSnackBar,
     public router: Router
-  ) { }
+  ) {
+    this.userData = JSON.parse(localStorage.getItem("user") || "");
+   }
 /** Lifecycle hook called after component initialization. */  ngOnInit(): void {
- // this.getProfile();
-  this.user = JSON.parse(localStorage.getItem("user")!);
-  //this.getProfile();
-  
-  
+    // this.getProfile();
+    this.user = JSON.parse(localStorage.getItem("user")!);
+   
+    this.favoritemovie = this.user?.FavoriteMovies;
+    //this.getProfile();
+    this.getMovies();
+
+
   }
+
+  openHome(): void {
+    this.router.navigate(['movies']);
+  }
+
+
+ 
+
+
 
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((result: any) => {
       if (Array.isArray(result)) {
         this.movies = result;
       }
+
+      this.getFavMovies();
       return this.movies;
     });
   }
@@ -69,10 +97,17 @@ export class UserProfileComponent implements OnInit {
      * Fetches user's favorite movies.
      */
   getFavMovies(): void {
-    this.fetchApiData.getUser().subscribe((result) => {
+    /*this.fetchApiData.getUser().subscribe((result) => {
       this.favoriteMoviesIDs = result.favoritemovie;
-    });
+    });*/
+    if (this.user) {
+      this.favoriteMoviesIDs = this.user.FavoriteMovies;
+    }
+
+    this.favoritemovie = this.favoriteMoviesIDs.map(id => this.movies.find(movie => movie._id == id))
   }
+
+
 
   /**
      * Checks if a movie is in the user's favorite movies list.
@@ -105,6 +140,7 @@ export class UserProfileComponent implements OnInit {
     if (user) {
       this.fetchApiData.addFavoriteMovie(user._id, movie._id).subscribe((result) => {
         localStorage.setItem('user', JSON.stringify(result));
+        this.favoritemovie = this.user?.FavoriteMovies;
         this.getFavMovies(); // Refresh favorite movies after adding a new one
         this.snackBar.open(`${movie.movieName} has been added to your favorites`, 'OK', {
           duration: 1000,
@@ -125,6 +161,7 @@ export class UserProfileComponent implements OnInit {
       this.userData.Username = parsedUser.Username;
       this.fetchApiData.deleteFavoriteMovie(parsedUser._id, movie._id).subscribe((result) => {
         localStorage.setItem('user', JSON.stringify(result));
+        this.favoritemovie = this.user?.FavoriteMovies;
         // Remove the movie ID from the favoritemovie array
         this.favoriteMoviesIDs = this.favoriteMoviesIDs.filter((id) => id !== movie._id);
         // Fetch the user's favorite movies again to update the movie list
@@ -140,39 +177,42 @@ export class UserProfileComponent implements OnInit {
   /**
      * Updates user data.
      */
-    /*
-  updateUser( ): void {
-    this.fetchApiData.editUserProfile(this.formUserData).subscribe((result) => {
-      console.log('User update success:', result);
-      localStorage.setItem('user', JSON.stringify(result));
-      this.snackBar.open('User updated successfully!', 'OK', {
-        duration: 2000},
-      );
-      this.user = JSON.parse(localStorage.getItem("user")!)
-    }
-    , (error) => {
-      console.log('Error updating user:', error);
-      this.snackBar.open('Failed to update user', 'OK', {
-        duration: 2000,
-      })}
-})};
-  */
- 
-  updateUser( ): void {
-  this.fetchApiData.editUserProfile(this.formUserData).subscribe((resp) => {
-    console.log('User update success:', resp);
-    localStorage.setItem('user', JSON.stringify(resp));
+  /*
+updateUser( ): void {
+  this.fetchApiData.editUserProfile(this.formUserData).subscribe((result) => {
+    console.log('User update success:', result);
+    localStorage.setItem('user', JSON.stringify(result));
     this.snackBar.open('User updated successfully!', 'OK', {
-      duration: 2000,
-    });
+      duration: 2000},
+    );
     this.user = JSON.parse(localStorage.getItem("user")!)
-  }, (error) => {
+  }
+  , (error) => {
     console.log('Error updating user:', error);
     this.snackBar.open('Failed to update user', 'OK', {
       duration: 2000,
+    })}
+})};*/
+
+
+
+
+  updateUser(): void {
+    this.fetchApiData.editUserProfile(this.userData).subscribe((resp) => {
+      console.log('User update success:', resp);
+      localStorage.setItem('user', JSON.stringify(resp));
+      this.snackBar.open('User updated successfully!', 'OK', {
+        duration: 2000,
+      });
+      this.user = JSON.parse(localStorage.getItem('user')!)
+    }, (error) => {
+      console.log('Error updating user:', error);
+      this.snackBar.open('Failed to update user', 'OK', {
+        duration: 2000,
+      });
     });
-  });
-}
+  }
+  
 
   /**
      * Deletes the user's account.
@@ -237,27 +277,26 @@ export class UserProfileComponent implements OnInit {
   }
 
 
-  
-     // Fetches user profile data.
-     /*public getProfile(): void {
-      this.fetchApiData.getUser().subscribe((result: any) => {
-        console.log('result:', result.favoritemovie);
-        this.user = result;
-        this.userData.Username = this.user.Username;
-        this.userData.Email = this.user.Email;
-        this.userData._id = this.user._id;
-        if (this.user.Birthday) {
-          let Birthday = new Date(this.user.Birthday);
-          if (!isNaN(Birthday.getTime())) {
-            this.userData.Birthday = Birthday.toISOString().split('T')[0];
-          }
-        }
-        this.formUserData = { ...this.userData };
-        this.favoriteMoviesIDs = this.user.favoritemovie;
-  
-        this.fetchApiData.getAllMovies().subscribe((movies: any[]) => {
-        this.favoritemovie = movies.filter((movie: any) => this.favoriteMoviesIDs.includes(movie._id));
-        });
-      }*/
-    }
 
+  // Fetches user profile data.
+  /*public getProfile(): void {
+   this.fetchApiData.getUser().subscribe((result: any) => {
+     console.log('result:', result.favoritemovie);
+     this.user = result;
+     this.userData.Username = this.user.Username;
+     this.userData.Email = this.user.Email;
+     this.userData._id = this.user._id;
+     if (this.user.Birthday) {
+       let Birthday = new Date(this.user.Birthday);
+       if (!isNaN(Birthday.getTime())) {
+         this.userData.Birthday = Birthday.toISOString().split('T')[0];
+       }
+     }
+     this.formUserData = { ...this.userData };
+     this.favoriteMoviesIDs = this.user.favoritemovie;
+ 
+     this.fetchApiData.getAllMovies().subscribe((movies: any[]) => {
+     this.favoritemovie = movies.filter((movie: any) => this.favoriteMoviesIDs.includes(movie._id));
+     });
+   }*/
+}

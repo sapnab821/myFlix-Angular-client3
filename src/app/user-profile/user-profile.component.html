@@ -1,4 +1,8 @@
 <div class="main">
+    <a mat-button (click)="openHome()"
+class="nav-buttons">
+      Home
+    </a>
 
     <!-- User profile section -->
     <div class="user-profile">
@@ -29,11 +33,19 @@
 
             <div class="update-user">
                 <h2>Update User Info</h2>
-                <form (ngSubmit)="updateUser()">
-                    <input type="text" [(ngModel)]="formUserData.Username" name="name" placeholder="Name" />
-                    <input type="date" [(ngModel)]="formUserData.Birthday" name="birthday" placeholder="Birthday" />
-                    <input type="email" [(ngModel)]="formUserData.Email" name="email" placeholder="Email" />
-                    <button type="submit">Update</button>
+                <form >
+                    <input type="text" [(ngModel)]="userData.Username" name="name" placeholder="Name" />
+                    <input type="text" [(ngModel)]="userData.Password" name="password"  placeholder="password"/>
+                    <input type="date" [(ngModel)]="userData.Birthday" name="birthday" placeholder="Birthday" />
+                    <input type="email" [(ngModel)]="userData.Email" name="email" placeholder="Email" />
+                    
+                        <button
+                        
+                        (click)="updateUser()"
+                        color="primary"
+                        style="margin-right: 10px;"
+                        > Update
+                    </button>
                 </form>
             
                             
@@ -50,23 +62,23 @@
             <h2>Favorite Movies</h2>
 
             <!-- Container for favorite movies -->
-            <div class="favorite-movies-container">
+            <div class="favorite-movies-container" >
                 <!-- Message when there are no favorite movies -->
                 <div *ngIf="favoritemovie.length === 0" class="movie-cards">
                     <p>No favorite movies found!</p>
                 </div>
 
                 <!-- Display favorite movies -->
-                <div class="movie-cards">
-                    <mat-card *ngFor="let movie of favoritemovie" class="card">
-                        <!-- Movie image -->
-                        <img src="{{ movie.image }}" alt="{{ movie._id }}" />
+                <div class="movie-cards" style="display: flex;">
+                    <mat-card *ngFor="let movie of favoritemovie" class="card" style="flex: 1 1 auto;">
+                        
 
                         <!-- Movie details -->
                         <div class="cardContent">
                             <mat-card-header>
                                 <mat-card-title>{{ movie.Title }}</mat-card-title>
-                                <mat-card-subtitle>{{ movie?.Director?.director }}</mat-card-subtitle>
+                                <img mat-card-title [src]="movie.imageURL" alt="{{ movie._id }}"/>
+                                <mat-card-subtitle>{{ movie?.Director?.Name }}</mat-card-subtitle>
                             </mat-card-header>
 
                             

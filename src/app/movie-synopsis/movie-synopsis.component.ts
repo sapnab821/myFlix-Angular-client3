@@ -27,11 +27,10 @@ export class MovieSynopsisComponent implements OnInit {
     }
   ) { }
 
-  /**
-     * Lifecycle hook that is called after data-bound properties of a directive are initialized.
-     */
+  
   ngOnInit(): void {
     
   }
   
+
 }
