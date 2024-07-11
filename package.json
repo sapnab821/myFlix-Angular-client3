@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "predeploy": "rimraf dist",
+    "deploy": "npm run build && gh-pages -d dist",
+    "gh-pages": "npm run build && gh-pages -d dist"
   },
   "private": true,
   "dependencies": {
@@ -20,21 +23,27 @@
     "@angular/platform-browser": "^17.2.0",
     "@angular/platform-browser-dynamic": "^17.2.0",
     "@angular/router": "^17.2.0",
+    "angular-disable-inflight": "^1.0.1",
+    "glob": "^11.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.2.0",
-    "@angular/cli": "^17.2.0",
+    "@angular/cli": "^18.1.0",
     "@angular/compiler-cli": "^17.2.0",
     "@types/jasmine": "~5.1.0",
+    "angular-cli-ghpages": "^2.0.1",
+    "gh-pages": "^6.1.1",
+    "gulp-rev-delete-original": "^0.2.3",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "rimraf": "^6.0.1",
     "typescript": "~5.3.2"
   }
 }
