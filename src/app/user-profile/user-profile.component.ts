@@ -178,29 +178,6 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  /**
-     * Updates user data.
-     */
-  /*
-updateUser( ): void {
-  this.fetchApiData.editUserProfile(this.formUserData).subscribe((result) => {
-    console.log('User update success:', result);
-    localStorage.setItem('user', JSON.stringify(result));
-    this.snackBar.open('User updated successfully!', 'OK', {
-      duration: 2000},
-    );
-    this.user = JSON.parse(localStorage.getItem("user")!)
-  }
-  , (error) => {
-    console.log('Error updating user:', error);
-    this.snackBar.open('Failed to update user', 'OK', {
-      duration: 2000,
-    })}
-})};*/
-
-
-
-
   updateUser(): void {
     this.fetchApiData.editUserProfile(this.formUserData).subscribe((resp) => {
       //let user= JSON.parse(localStorage.getItem('user'));
@@ -297,26 +274,4 @@ updateUser( ): void {
   }
 
 
-
-  // Fetches user profile data.
-  /*public getProfile(): void {
-   this.fetchApiData.getUser().subscribe((result: any) => {
-     console.log('result:', result.favoritemovie);
-     this.user = result;
-     this.userData.Username = this.user.Username;
-     this.userData.Email = this.user.Email;
-     this.userData._id = this.user._id;
-     if (this.user.Birthday) {
-       let Birthday = new Date(this.user.Birthday);
-       if (!isNaN(Birthday.getTime())) {
-         this.userData.Birthday = Birthday.toISOString().split('T')[0];
-       }
-     }
-     this.formUserData = { ...this.userData };
-     this.favoriteMoviesIDs = this.user.favoritemovie;
- 
-     this.fetchApiData.getAllMovies().subscribe((movies: any[]) => {
-     this.favoritemovie = movies.filter((movie: any) => this.favoriteMoviesIDs.includes(movie._id));
-     });
-   }*/
 }

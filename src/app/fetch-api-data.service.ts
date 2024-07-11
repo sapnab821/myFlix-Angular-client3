@@ -106,34 +106,7 @@ export class UserRegistrationService{
     );
   }
 
- // get a user by userId  -- not sure if this is needed !!!
- /* getUser(userId: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'users/' + userId, {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      map(this.extractResponseData),
-      catchError(this.handleError)
-    );
-  }*/
-
-  /*getUser(): Observable<any> {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const token = localStorage.getItem("token");
-    const url = apiUrl + "users/" + user.Username; // <-- Corrected property name
-    const headers = new HttpHeaders({
-      Authorization: "Bearer " + token,
-    });
-    return this.http.get(url, { headers }).pipe(
-      map(this.extractResponseData),
-      catchError((error) => {
-        console.error("API Error:", error);
-        return this.handleError(error);
-      })
-    );
-  }*/
+ 
   public getLocalUser(): any {
     const user = localStorage.getItem('user');
     if (user && this.isJsonString(user)) {
@@ -223,20 +196,7 @@ export class UserRegistrationService{
     );
   }
 
-  // Edit a user's profile
-  /*
-  public editUserProfile(userDetails: any): Observable<any> {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const token = localStorage.getItem('token');
-    return this.http.put(apiUrl + 'users/' + user._id, userDetails, {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      map(this.extractResponseData),
-      catchError(this.handleError)
-    );
-  }*/
+  
 
   public editUserProfile(userDetails:any, ): Observable<any> {
     const token = localStorage.getItem('token');
