@@ -53,6 +53,11 @@ openProfile(): void {
   this.router.navigate(['profile']);
 }
 
+logOut(): void {
+  localStorage.clear();
+  this.router.navigate(['welcome']);
+}
+
 getMovies(): void {
   this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;

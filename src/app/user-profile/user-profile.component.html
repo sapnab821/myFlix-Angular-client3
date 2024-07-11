@@ -31,21 +31,17 @@ class="nav-buttons">
         
            <form>
 
+            <button (click)="deleteUser()">Delete User</button>
+
             <div class="update-user">
                 <h2>Update User Info</h2>
-                <form >
-                    <input type="text" [(ngModel)]="userData.Username" name="name" placeholder="Name" />
-                    <input type="text" [(ngModel)]="userData.Password" name="password"  placeholder="password"/>
-                    <input type="date" [(ngModel)]="userData.Birthday" name="birthday" placeholder="Birthday" />
-                    <input type="email" [(ngModel)]="userData.Email" name="email" placeholder="Email" />
+                <form form (ngSubmit)="updateUser()">
+                    <input type="text" [(ngModel)]="formUserData.Username" name="name" placeholder="Name" />
+                    <input type="text" [(ngModel)]="formUserData.Password" name="password"  placeholder="password"/>
+                    <input type="date" [(ngModel)]="formUserData.Birthday" name="birthday" placeholder="Birthday" />
+                    <input type="email" [(ngModel)]="formUserData.Email" name="email" placeholder="Email" />
                     
-                        <button
-                        
-                        (click)="updateUser()"
-                        color="primary"
-                        style="margin-right: 10px;"
-                        > Update
-                    </button>
+                    <button type="submit">Update</button>
                 </form>
             
                             

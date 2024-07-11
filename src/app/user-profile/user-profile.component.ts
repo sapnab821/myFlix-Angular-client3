@@ -12,6 +12,7 @@ import { number } from 'prop-types';
 import { DirectorInfoComponent } from '../director-info/director-info.component';
 import { GenreInfoComponent } from '../genre-info/genre-info.component';
 import { MovieSynopsisComponent } from '../movie-synopsis/movie-synopsis.component';
+import { isValidObjectId } from 'mongoose';
 
 /**
  * Component for user profile management.
@@ -31,8 +32,13 @@ export class UserProfileComponent implements OnInit {
   formUserData = { Username: '', Email: '', Birthday: '', _id: '' };*/
 
    /** Input data for updating user information. */
-   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
-
+   @Input() 
+   userData: any={};
+   formUserData: any={};
+   /*userData = { Username: '', Password: '', Email: '', Birthday: '', UserId: Object, FavoriteMovies:[] };
+   formUserData = { Username: '', Email: '', Password: '', Birthday: '', UserId: Object, FavoriteMovies: []
+    };
+*/
   /*
 
   userData: any = {};
@@ -69,6 +75,7 @@ export class UserProfileComponent implements OnInit {
     this.favoritemovie = this.user?.FavoriteMovies;
     //this.getProfile();
     this.getMovies();
+    
 
 
   }
@@ -76,9 +83,6 @@ export class UserProfileComponent implements OnInit {
   openHome(): void {
     this.router.navigate(['movies']);
   }
-
-
- 
 
 
 
@@ -198,37 +202,53 @@ updateUser( ): void {
 
 
   updateUser(): void {
-    this.fetchApiData.editUserProfile(this.userData).subscribe((resp) => {
+    this.fetchApiData.editUserProfile(this.formUserData).subscribe((resp) => {
+      //let user= JSON.parse(localStorage.getItem('user'));
       console.log('User update success:', resp);
       localStorage.setItem('user', JSON.stringify(resp));
       this.snackBar.open('User updated successfully!', 'OK', {
         duration: 2000,
       });
-      this.user = JSON.parse(localStorage.getItem('user')!)
-    }, (error) => {
+      
+    }, 
+    (error) => {
       console.log('Error updating user:', error);
       this.snackBar.open('Failed to update user', 'OK', {
         duration: 2000,
-      });
-    });
-  }
+      });}
+    )}
+  
   
 
-  /**
-     * Deletes the user's account.
+  
+     //Deletes the user's account.
      
-  async deleteUser(): Promise<void> {
-    console.log('deleteUser function called:', this.userData._id)
-    if (confirm('Do you want to delete your account permanently?')) {
-      this.fetchApiData.deleteUser().subscribe(() => {
-        this.snackBar.open('Account deleted successfully!', 'OK', {
-          duration: 3000,
-        });
+ 
+
+  deleteUser(): void {
+    
+    
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (confirm('are you sure?')) {
+      this.fetchApiData.deleteUser(this.user.Username).subscribe((result) => {
+        console.log(result);
         localStorage.clear();
-        this.router.navigate(['welcome']);
       });
+        
+        this.snackBar.open(
+          'You have successfully deleted your account',
+          'OK',
+          {
+            duration: 2000,
+          }
+        );
+      this.router.navigate(['welcome']);
+        
+      };
+     
     }
-  }*/
+    
+  
   /**
      * Opens a dialog to view genre information.
      * @param genre - The genre.

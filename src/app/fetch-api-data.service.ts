@@ -160,7 +160,7 @@ export class UserRegistrationService{
       console.log('Error setting user');
   }
 
-  public getUser(Username?: string): Observable<any> {
+  public getUser(UserId?: string): Observable<any> {
 
     const user = this.getLocalUser();
 
@@ -238,10 +238,12 @@ export class UserRegistrationService{
     );
   }*/
 
-  public editUserProfile(userDetails:any): Observable<any> {
+  public editUserProfile(userDetails:any, ): Observable<any> {
     const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    return this.http.put(apiUrl + 'users/' + userDetails.Username, userDetails, {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    console.log(userDetails);
+    console.log(user);
+    return this.http.put(apiUrl + 'users/' + user.Username, userDetails, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -252,9 +254,9 @@ export class UserRegistrationService{
   }
 
   // Delete a user 
-  deleteUser(_id: string): Observable<any> {
+  deleteUser(Username: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/' + _id, {
+    return this.http.delete(apiUrl + 'users/' + Username, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
