@@ -103,7 +103,10 @@
           }
         },
         "deploy": {
-          "builder": "angular-cli-ghpages:deploy"
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+          "repo": "https://github.com/sapnab821/myFlix-Angular-client3.git",
+          "baseHref": "/myFlix-Angular-client/" 
         }
       }
     }
@@ -111,4 +114,4 @@
   "cli": {
     "analytics": "184e0a8e-068b-46e3-8360-d2a88a9a3a91"
   }
-}
+  }}
