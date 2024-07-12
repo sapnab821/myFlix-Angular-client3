@@ -1,0 +1,2 @@
+command = "ng build --prod"
+  publish = "dist/myFlix-Angular-client"
