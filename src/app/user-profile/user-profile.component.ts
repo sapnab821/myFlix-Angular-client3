@@ -3,8 +3,8 @@ import { UserRegistrationService } from '../fetch-api-data.service';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { number } from 'prop-types';
-//import {date} from 'mongoose';
+
+
 
 
 // Component Imports
@@ -12,7 +12,7 @@ import { number } from 'prop-types';
 import { DirectorInfoComponent } from '../director-info/director-info.component';
 import { GenreInfoComponent } from '../genre-info/genre-info.component';
 import { MovieSynopsisComponent } from '../movie-synopsis/movie-synopsis.component';
-import { isValidObjectId } from 'mongoose';
+
 
 /**
  * Component for user profile management.
