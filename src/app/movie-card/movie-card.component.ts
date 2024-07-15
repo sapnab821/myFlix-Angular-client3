@@ -13,58 +13,85 @@ import { DirectorInfoComponent } from '../director-info/director-info.component'
   selector: 'app-movie-card',
   templateUrl: './movie-card.component.html',
   styleUrls: ['./movie-card.component.scss'],
-  
+
 })
 
 
 
 
 export class MovieCardComponent implements OnInit {
-  movies: any[] = [];
 
+  /**
+ * Array to store all movies.
+ */
+  movies: any[] = [];
+  /**
+   * Information about the genre, director, user, and favorite movies.
+   */
   genre: any = "";
 
   director: any = "";
 
   user: any = {};
 
-  userData : any = {};
+  userData: any = {};
 
   favoritemovie: any[] = [];
 
-  
-
   public Username: string = "";
- 
+
+  /**
+* Constructor of the MovieCardComponent class.
+* Initializes FetchApiDataService, MatDialog, and MatSnackBar.
+* @param fetchApiData - Service for fetching data from the API.
+* @param dialog - Service for opening dialogs.
+* @param snackBar - Service for displaying snack bar notifications.
+*/
+
   constructor(public fetchApiData: UserRegistrationService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-  
-      private router: Router
-   
+
+    private router: Router
+
   ) { }
 
-ngOnInit(): void {
- this.getMovies();
- this.Username = JSON.parse(localStorage.getItem("user")!).Username;
-}
+  /**
+ * Lifecycle hook that is called after the component's view has been initialized.
+ * Initializes the component by fetching user and movies.
+ */
 
-openProfile(): void {
-  this.router.navigate(['profile']);
-}
+  ngOnInit(): void {
+    this.getMovies();
+    this.Username = JSON.parse(localStorage.getItem("user")!).Username;
+  }
 
-logOut(): void {
-  localStorage.clear();
-  this.router.navigate(['welcome']);
-}
+  openProfile(): void {
+    this.router.navigate(['profile']);
+  }
 
-getMovies(): void {
-  this.fetchApiData.getAllMovies().subscribe((resp: any) => {
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['welcome']);
+  }
+
+  /**
+     * Fetches all movies from the database.
+     */
+
+  getMovies(): void {
+    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
       console.log(this.movies);
       return this.movies;
     });
   }
+
+  /**
+  * Opens dialog to display movie synopsis.
+  * @param title - The name of the movie.
+  * @param description - The description of the movie.
+  */
 
   openSynopsisDialog(title: string, description: string): void {
     this.dialog.open(MovieSynopsisComponent, {
@@ -76,6 +103,11 @@ getMovies(): void {
     });
   }
 
+  /**
+  * Opens dialog to display genre information.
+  * @param name - The name of the genre.
+  */
+
   openGenreDialog(name: string, description: string): void {
     this.dialog.open(GenreInfoComponent, {
       data: {
@@ -85,6 +117,11 @@ getMovies(): void {
       width: '500px',
     });
   }
+
+  /**
+   * Opens dialog to display director information.
+   * @param name - The name of the director.
+   */
 
   openDirectorDialog(name: string, bio: string, birthday: number, death: string): void {
     this.dialog.open(DirectorInfoComponent, {
@@ -97,6 +134,16 @@ getMovies(): void {
       width: '500px',
     });
   }
+
+  /**
+ * Filters movies to display only favorites.
+ */
+
+  /**
+ * Retrieves user's favorite movies from local storage.
+ */
+
+
   getFavorites(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       if (Array.isArray(resp)) {
@@ -110,15 +157,16 @@ getMovies(): void {
   }
 
   /**
-    * Checks if a movie is in the user's favorite list.
-    * @param movie - The movie to check.
-    * @returns True if the movie is in the favorite list, false otherwise.
-    */
+   * Checks if a movie is favorited by the user.
+   * @param movie - The movie object.
+   * @returns True if the movie is favorited, false otherwise.
+   */
+
   isFav(movie: any): boolean {
-    
+
     let userx = localStorage.getItem('user');
-    let user= JSON.parse(userx);
-    const userFavorite=user['FavoriteMovies'];
+    let user = JSON.parse(userx);
+    const userFavorite = user['FavoriteMovies'];
     console.log(userFavorite);
     return userFavorite.includes(movie._id);
 
@@ -138,9 +186,10 @@ getMovies(): void {
   }
 
   /**
-     * Adds a movie to the user's favorite list.
-     * @param movie - The movie to add to favorites.
-     */
+ * Adds a movie to user's favorites.
+ * @param movie - The movie object to be added.
+ */
+
   addFavMovies(movie: any): void {
     let user = localStorage.getItem('user');
     if (user) {
@@ -162,9 +211,10 @@ getMovies(): void {
   }
 
   /**
-     * Deletes a movie from the user's favorite list.
-     * @param movie - The movie to remove from favorites.
-     */
+  * Deletes a movie from user's favorites.
+  * @param movie - The movie object to be removed.
+  */
+
   deleteFavMovies(movie: any): void {
     let user = localStorage.getItem('user');
     if (user) {

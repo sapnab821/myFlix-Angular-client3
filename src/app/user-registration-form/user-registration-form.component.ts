@@ -10,6 +10,9 @@ import { UserRegistrationService } from '../fetch-api-data.service';
 // This import is used to display notifications back to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+/**
+ * The UserRegistrationFormComponent is used for user registration.
+ */
 
 @Component({
   selector: 'app-user-registration-form',
@@ -17,42 +20,56 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./user-registration-form.component.scss']
 })
 export class UserRegistrationFormComponent implements OnInit {
+  /**
+    * Holds the user's registration data.
+    */
+  @Input()
+  userData: any = {};
 
-  @Input() 
-  userData: any={};
-  //userData = { Username: '', Password: '', Email: '', Birthday: '' };
   formUserData: any = {
     Username: '',
     Password: '',
     Email: '',
     Birthday: ''
   };
+  /**
+    * Creates an instance of UserRegistrationFormComponent.
+    * @param fetchApiData - Service to interact with the API.
+    * @param dialogRef - Reference to the dialog opened.
+    * @param snackBar - Service to show snack bar notifications.
+    */
 
-
-constructor(
+  constructor(
     public fetchApiData: UserRegistrationService,
     public dialogRef: MatDialogRef<UserRegistrationFormComponent>,
     public snackBar: MatSnackBar) { }
 
-ngOnInit(): void {
-}
+  /**
+     * Initializes the component.
+     */
 
-// This is the function responsible for sending the form inputs to the backend
-registerUser(): void {
-   this.fetchApiData.userRegistration(this.userData).subscribe((result) => {
-  // Logic for a successful user registration goes here! (To be implemented)
-     this.dialogRef.close(); // This will close the modal on success!
-     this.snackBar.open(result, 'OK', {
+  ngOnInit(): void {
+  }
+
+  /**
+     * Registers a new user by sending userData to the backend.
+     */
+
+  registerUser(): void {
+    this.fetchApiData.userRegistration(this.userData).subscribe((result) => {
+      // Logic for a successful user registration goes here! (To be implemented)
+      this.dialogRef.close(); // This will close the modal on success!
+      this.snackBar.open(result, 'OK', {
         duration: 2000
-     });
+      });
     }, (result) => {
       this.snackBar.open(result, 'ok', {
         duration: 2000
       });
     });
   }
-    
 
 
-    }
+
+}
 

@@ -5,26 +5,39 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { tap, take } from 'rxjs';
 
-//Declaring the api url that will provide data for the client app
+/**
+   * Base URL of the API.
+   */
+
 const apiUrl = `https://sbmovie-flix-81059d891de6.herokuapp.com/`;
+
+/**
+ * Injectable service for fetching data from the API.
+ */
 
 @Injectable({
   providedIn: 'root'
 })
 
 
+/**
+   * Constructs a new FetchApiDataService with the HttpClient injected.
+   * @param http - The injected HttpClient.
+   */
 
 
-
-export class UserRegistrationService{
+export class UserRegistrationService {
   // Inject the HttpClient module to the constructor params
   // This will provide HttpClient to the entire class, making it available via this.http
   constructor(private http: HttpClient) { }
 
 
-  // This service will handle the user registration form
+  /**
+   * Registers a new user.
+   * @param userDetails - The details of the user to be registered.
+   * @returns An observable with the registration response.
+   */
 
-  // Making the api call for the user registration endpoint
   public userRegistration(userDetails: any): Observable<any> {
     console.log(userDetails);
     return this.http.post(apiUrl + 'users', userDetails).pipe
@@ -34,20 +47,28 @@ export class UserRegistrationService{
   }
 
 
-  // This service will handle the user signin form
+  /**
+   * Logs in a user.
+   * @param userDetails - The user credentials.
+   * @returns An observable with the login response.
+   */
 
- 
+
   public userLogin(userDetails: any): Observable<any> {
     console.log(userDetails);
     return this.http.post(apiUrl + `login?username=${userDetails.username}&password=${userDetails.password}`, userDetails)
-    //return this.http.post(apiUrl + 'login', userDetails).pipe(
+      //return this.http.post(apiUrl + 'login', userDetails).pipe(
       .pipe(catchError(this.handleError)
-  );
+      );
   }
 
-  
 
-  // get all movies
+
+  /**
+   * Retrieves all movies.
+   * @returns An observable with all movies.
+   */
+
   getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'movies', {
@@ -60,13 +81,24 @@ export class UserRegistrationService{
       catchError(this.handleError)
     );
   }
-  // Non-typed response extraction
+
+  /**
+   * Extracts response data from HTTP response.
+   * @param res - The HTTP response.
+   * @returns Extracted response data.
+   */
+
   private extractResponseData(res: Response | Object): any {
     const body = res;
     return body || {};
   }
 
-  // Get a single movie by title
+  /**
+  * Retrieves details of a specific movie.
+  * @param Title - The title of the movie.
+  * @returns An observable with the movie details.
+  */
+
   getOneMovie(Title: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'movies' + Title, {
@@ -80,7 +112,13 @@ export class UserRegistrationService{
     );
   }
 
-  // Get a director by name
+  /**
+   * Retrieves details of a specific director.
+   * @param Name - The name of the director.
+   * @returns An observable with the director details.
+   */
+
+
   public getDirector(Name: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'movies/director/' + Name, {
@@ -93,7 +131,12 @@ export class UserRegistrationService{
     );
   }
 
-  // get a genre by name
+  /**
+   * Retrieves details of a specific genre.
+   * @param genreName - The name of the genre.
+   * @returns An observable with the genre details.
+   */
+
   public getGenre(genreName: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'movies/genres/' + genreName, {
@@ -106,7 +149,11 @@ export class UserRegistrationService{
     );
   }
 
- 
+  /**
+   * Retrieves user details.
+   * @returns An observable with the user details.
+   */
+
   public getLocalUser(): any {
     const user = localStorage.getItem('user');
     if (user && this.isJsonString(user)) {
@@ -117,6 +164,11 @@ export class UserRegistrationService{
     }
   }
 
+  /**
+   * Creates function to parse .
+   * @returns An JSON.parse(str).
+   */
+
   private isJsonString(str: string): boolean {
     try {
       JSON.parse(str);
@@ -126,38 +178,12 @@ export class UserRegistrationService{
     return true;
   }
 
-  public setLocalUser(user: any): void {
-    if (user.isJsonObject(user))
-      localStorage.setItem('user', JSON.stringify(user));
-    else
-      console.log('Error setting user');
-  }
+  /**
+   * Retrieves favorite movies of a user.
+   * @param userId - The username of the user.
+   * @returns An observable with the user's favorite movies.
+   */
 
-  public getUser(UserId?: string): Observable<any> {
-
-    const user = this.getLocalUser();
-
-    const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'users/' + user.Username, {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      tap({
-        next: data => {
-          if (this.isJsonString(JSON.stringify(data))) {
-          } else {
-            console.log('Data is not valid JSON:', data);
-          }
-        },
-        error: error => console.log('Error:', error)
-      }),
-      map(this.extractResponseData),
-      catchError(this.handleError)
-    );
-  }
-
-  // Get favourite movies by userid
   getFavoriteMovies(userId: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.get(apiUrl + 'users/' + userId + 'FavoriteMovies', {
@@ -170,7 +196,13 @@ export class UserRegistrationService{
     );
   }
 
-  // Add a movie to a user's list of favorites
+  /**
+   * Adds a movie to a user's favorite movies.
+   * @param movieId - The name of the movie to be added.
+   * @param userId - The username of the user.
+   * @returns An observable with the response after adding the movie to favorites.
+   */
+
   addFavoriteMovie(userId: number, movieId: number): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.post(apiUrl + 'users/' + userId + '/movies/' + movieId, movieId, {
@@ -183,10 +215,16 @@ export class UserRegistrationService{
     );
   }
 
-  // Delete a movie from a user's list of favorites
+  /**
+  * Deletes a movie from a user's favorite movies.
+  * @param movieId - The name of the movie to be removed.
+  * @param userId - The username of the user.
+  * @returns An observable with the response after deleting the movie from favorites.
+  */
+
   deleteFavoriteMovie(userId: string, movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/' + userId + '/movies/' +  movieId, {
+    return this.http.delete(apiUrl + 'users/' + userId + '/movies/' + movieId, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -196,9 +234,13 @@ export class UserRegistrationService{
     );
   }
 
-  
+  /**
+   * Updates user details.
+   * @param userDetails - The updated user object.
+   * @returns An observable with the updated user details.
+   */
 
-  public editUserProfile(userDetails:any, ): Observable<any> {
+  public editUserProfile(userDetails: any,): Observable<any> {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     console.log(userDetails);
@@ -213,7 +255,12 @@ export class UserRegistrationService{
     );
   }
 
-  // Delete a user 
+  /**
+   * Deletes a user.
+   * @param Username - the Username
+   * @returns An observable with the response after deleting the user.
+   */
+
   deleteUser(Username: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.delete(apiUrl + 'users/' + Username, {
@@ -225,7 +272,13 @@ export class UserRegistrationService{
       catchError(this.handleError)
     );
   }
-  // Error handling
+
+  /**
+   * Handles HTTP errors.
+   * @param error - The HTTP error response.
+   * @returns An observable with an error message.
+   */
+
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       console.error('Some error occurred:', error.error.message);

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter  } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { UserRegistrationService } from '../fetch-api-data.service';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -31,13 +31,13 @@ export class UserProfileComponent implements OnInit {
   /*@Input() userData = { Username: '', Email: '', Birthday: '', _id: '' };
   formUserData = { Username: '', Email: '', Birthday: '', _id: '' };*/
 
-   /** Input data for updating user information. */
-   @Input() 
-   userData: any={};
-   formUserData: any={};
-   /*userData = { Username: '', Password: '', Email: '', Birthday: '', UserId: Object, FavoriteMovies:[] };
-   formUserData = { Username: '', Email: '', Password: '', Birthday: '', UserId: Object, FavoriteMovies: []
-    };
+  /** Input data for updating user information. */
+  @Input()
+  userData: any = {};
+  formUserData: any = {};
+  /*userData = { Username: '', Password: '', Email: '', Birthday: '', UserId: Object, FavoriteMovies:[] };
+  formUserData = { Username: '', Email: '', Password: '', Birthday: '', UserId: Object, FavoriteMovies: []
+   };
 */
   /*
 
@@ -53,30 +53,39 @@ export class UserProfileComponent implements OnInit {
   @Output() updateUserEvent = new EventEmitter<any>();
 
   /**
-     * Constructs the UserProfileComponent.
-     * @param fetchApiData - The service for fetching API data.
-     * @param dialog - The dialog service for displaying dialogs.
-     * @param snackBar - The snack bar service for displaying notifications.
-     * @param router - The router service for navigation.
-     */
+* Creates an instance of UserProfileComponent.
+* @param fetchApiData - API data fetching service.
+* @param dialogRef - Angular Material dialog ref
+* @param dialog - Angular Material dialog service.
+* @param snackBar - Angular Material snackbar service.
+* @param router - Angular Router service.
+*/
+
+
   constructor(
     public fetchApiData: UserRegistrationService,
     public dialog: MatDialog,
-    public dialogRef: MatDialogRef<UserProfileComponent>, 
+    public dialogRef: MatDialogRef<UserProfileComponent>,
     public snackBar: MatSnackBar,
     public router: Router
   ) {
     this.userData = JSON.parse(localStorage.getItem("user") || "");
-   }
-/** Lifecycle hook called after component initialization. */  ngOnInit(): void {
-    // this.getProfile();
-    this.user = JSON.parse(localStorage.getItem("user")!);
-   
-    this.favoritemovie = this.user?.FavoriteMovies;
-    //this.getProfile();
-    this.getMovies();
-    
+  }
+  /**
+     * Lifecycle hook that is called after data-bound properties of a directive are initialized.
+     */
 
+  ngOnInit(): void {
+
+    this.user = JSON.parse(localStorage.getItem("user")!);
+
+    this.favoritemovie = this.user?.FavoriteMovies;
+
+    this.getMovies();
+
+    /**
+         * opens movie page
+         */
 
   }
 
@@ -84,7 +93,9 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['movies']);
   }
 
-
+  /**
+       * Gets movies.
+       */
 
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((result: any) => {
@@ -101,9 +112,7 @@ export class UserProfileComponent implements OnInit {
      * Fetches user's favorite movies.
      */
   getFavMovies(): void {
-    /*this.fetchApiData.getUser().subscribe((result) => {
-      this.favoriteMoviesIDs = result.favoritemovie;
-    });*/
+
     if (this.user) {
       this.favoriteMoviesIDs = this.user.FavoriteMovies;
     }
@@ -118,6 +127,7 @@ export class UserProfileComponent implements OnInit {
      * @param movie - The movie to check.
      * @returns True if the movie is a favorite, otherwise false.
      */
+
   isFav(movie: any): boolean {
 
     return this.favoriteMoviesIDs.includes(movie._id);
@@ -128,6 +138,7 @@ export class UserProfileComponent implements OnInit {
      * Toggles a movie in the user's favorite movies list.
      * @param movie - The movie to toggle.
      */
+
   toggleFav(movie: any): void {
     const isFavorite = this.isFav(movie);
     isFavorite
@@ -139,6 +150,7 @@ export class UserProfileComponent implements OnInit {
      * Adds a movie to the user's favorite movies list.
      * @param movie - The movie to add.
      */
+
   addFavMovies(movie: any): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user) {
@@ -178,6 +190,11 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  /**
+      * Updates user's profile
+      * 
+      */
+
   updateUser(): void {
     this.fetchApiData.editUserProfile(this.formUserData).subscribe((resp) => {
       //let user= JSON.parse(localStorage.getItem('user'));
@@ -186,46 +203,49 @@ export class UserProfileComponent implements OnInit {
       this.snackBar.open('User updated successfully!', 'OK', {
         duration: 2000,
       });
-      
-    }, 
-    (error) => {
-      console.log('Error updating user:', error);
-      this.snackBar.open('Failed to update user', 'OK', {
-        duration: 2000,
-      });}
-    )}
-  
-  
 
-  
-     //Deletes the user's account.
-     
- 
+    },
+      (error) => {
+        console.log('Error updating user:', error);
+        this.snackBar.open('Failed to update user', 'OK', {
+          duration: 2000,
+        });
+      }
+    )
+  }
+
+
+
+
+
+  /**
+   * Deletes the user's account after confirmation.
+   * @returns Promise<void>
+   */
+
 
   deleteUser(): void {
-    
-    
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (confirm('are you sure?')) {
       this.fetchApiData.deleteUser(this.user.Username).subscribe((result) => {
         console.log(result);
         localStorage.clear();
       });
-        
-        this.snackBar.open(
-          'You have successfully deleted your account',
-          'OK',
-          {
-            duration: 2000,
-          }
-        );
+
+      this.snackBar.open(
+        'You have successfully deleted your account',
+        'OK',
+        {
+          duration: 2000,
+        }
+      );
       this.router.navigate(['welcome']);
-        
-      };
-     
-    }
-    
-  
+
+    };
+
+  }
+
+
   /**
      * Opens a dialog to view genre information.
      * @param genre - The genre.

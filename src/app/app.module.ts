@@ -41,6 +41,9 @@ const appRoutes: Routes = [
   { path: '', redirectTo: 'welcome', pathMatch: 'prefix' },
 ];
 
+/**
+ * The root module of the application.
+ */
 
 @NgModule({
   declarations: [
